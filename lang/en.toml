@@ -1,0 +1,6 @@
+[loggin]
+com_desc = "Authorization in the bot via SS14"
+arg_desc_name_or_emain = "Name or email"
+arg_desc_password = "Password"
+error = "Authorization error, please check your login or password"
+correct = "Authorization successful"

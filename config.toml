@@ -1,0 +1,4 @@
+[bot]
+token = ""
+command_prefix = "!"
+lang = "en"

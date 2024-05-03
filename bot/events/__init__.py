@@ -1,0 +1,1 @@
+from bot.events.on_ready import on_ready
