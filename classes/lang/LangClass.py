@@ -9,14 +9,14 @@ class LanguageManager:
         lang (str): The selected language code.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, lang_code: str) -> None:
         """
         Initializes the LanguageManager with the specified language.
-        """
-        with open("config.toml", "r") as file:
-            config = toml.load(file)
 
-        with open(f"lang/{config['bot']['lang']}.toml", "r") as file:
+        Args:
+            lang_code (str): The name of the lang_str.
+        """
+        with open(f"lang/{lang_code}.toml", "r", encoding="utf-8") as file:
             # Load the contents of the TOML file into a dictionary
             self.lang = toml.load(file)
     

@@ -13,12 +13,12 @@ from classes.lang import LanguageManager
 @bot.slash_command(name="loggin", description=lang.loc('loggin', 'com_desc'))
 async def loggin(
     ctx:           discord.ApplicationContext,
-    name_or_emain: Option(str, description=lang.loc('loggin', 'arg_desc_name_or_emain'), required=True), # type: ignore
-    password:      Option(str, description=lang.loc('loggin', 'arg_desc_password'), required=True)       # type: ignore
+    login:         Option(str, description=lang.loc('loggin', 'arg_desc_login'), required=True),   # type: ignore
+    password:      Option(str, description=lang.loc('loggin', 'arg_desc_password'), required=True) # type: ignore
     ):
     ss14login = SS14Login()
 
-    if ss14login.login(name_or_emain, password):
+    if ss14login.login(login, password):
         resp = lang.loc('loggin', 'correct')
     else:
         resp = lang.loc('loggin', 'error')
