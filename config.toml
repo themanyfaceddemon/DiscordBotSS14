@@ -1,4 +1,16 @@
 [bot]
 token = ""
-command_prefix = "!"
-lang = "en"
+prefix = "!"
+servers = []
+
+[lang]
+code = "en"
+
+[db]
+name = "user_data"
+
+[time]
+update_local_db = 3600
+
+[roles]
+not_set = true
