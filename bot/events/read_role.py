@@ -16,7 +16,7 @@ async def read_role() -> None:
     roles_config = config['roles']
     roles_list = [(role_id, role_level) for role_id, role_level in roles_config.items() if role_id != 'not_set']
 
-    for guild in list[discord.Guild](config["bot"]["servers"]):
+    for guild in bot.guilds:
         for member in guild.members:
             max_level = 0
             for role in member.roles:
