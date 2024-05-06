@@ -11,7 +11,7 @@ servers = [1218456392730411049, 1053877538025386074]# Servers IDs
 
 [lang]
 code = "en"                    # Language of the bot
-
+# Available languages: en, ru
 [db]
 name = "user_data"             # Name of the database
 
