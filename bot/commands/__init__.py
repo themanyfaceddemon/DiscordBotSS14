@@ -1,1 +1,1 @@
-from bot.commands.loggin import loggin
+from bot.commands.login import login

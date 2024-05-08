@@ -5,7 +5,7 @@ import toml
 from colorlog import ColoredFormatter
 
 from bot import bot
-from bot.commands import loggin
+from bot.commands import login
 from bot.events import on_ready
 
 
