@@ -1,5 +1,6 @@
 import logging
 
+import discord
 import toml
 from colorlog import ColoredFormatter
 
@@ -11,8 +12,10 @@ from bot.events import on_ready
 def main() -> None:
     with open("config.toml", "r") as file:
         config = toml.load(file)
-
-    bot.run(config["bot"]["token"])
+    try:
+        bot.run(config["bot"]["token"])
+    except discord.errors.LoginFailure as err:
+        logging.fatal(f"Bot login fatal error: {err}")
 
 if __name__ == "__main__":
     logger = logging.getLogger()
