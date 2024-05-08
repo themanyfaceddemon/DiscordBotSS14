@@ -131,28 +131,11 @@ class DBManager:
             ckey (str): The Ckey of the member.
             role_level (int): The role level of the member.
         """
-        cursor = self._connection.cursor()
         try:
-            self._connection.begin()
-            
-            cursor.execute("""
-            INSERT INTO users (DiscordID, Ckey, RoleLevel) VALUES (?, ?, ?);
-            """, 
-            (discord_id, ckey, role_level))
-            
-            self._connection.commit()
+            self.add_member(discord_id, ckey, role_level)
         except sqlite3.IntegrityError:
-            cursor.execute("""
-            UPDATE users
-            SET Ckey = ?,
-                RoleLevel = ?
-            WHERE DiscordID = ?;
-            """,
-            (ckey, role_level, discord_id))
-            
-            self._connection.commit()
+            self.update_member(discord_id, ckey, role_level)
         except Exception as e:
-            self._connection.rollback()
             logging.error(f"An error occurred during add_or_update_member: {e}")
 
     def get_all_users(self) -> list:
