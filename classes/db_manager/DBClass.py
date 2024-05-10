@@ -14,7 +14,7 @@ class DBManager:
         """
         try:
             self._setup_db()
-            self._connection = sqlite3.connect(f"data/{db_name}.db")
+            self._connection: sqlite3.Connection = sqlite3.connect(f"data/{db_name}.db")
             self._create_table()
         except Exception as err:
             logging.error(f"sqlite3 error: __init__: {err}")
@@ -57,7 +57,7 @@ class DBManager:
         Class destructor. Closes the connection to the database.
         """
         try:
-            if hasattr(self, '_connection') and self._connection is not None:
+            if self._connection is not None:
                 self._connection.close()
         except sqlite3.Error as err:
             logging.error(f"sqlite3 error: __del__: {err}")
