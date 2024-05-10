@@ -21,37 +21,18 @@ class DBManager:
 
     def _setup_db(self) -> None:
         """
-        Setup the database.
+        Setup the database dir.
         """
         if not os.path.exists("data"):
             os.makedirs("data")
-
-    def _table_exist(self) -> bool:
-        cursor = self._connection.cursor()
-        cursor.execute("""
-        SELECT name FROM sqlite_master WHERE type='table' AND name='users';
-        """)
-        result = cursor.fetchone()
-        if result:
-            return True
-
-        return False
 
     def _create_table(self) -> None:
         """
         Creates the 'users' table in the database if such a table does not already exist.
         """
-        if not self._table_exist():
-            cursor = self._connection.cursor()
-            cursor.execute("""
-            CREATE TABLE users (
-                ID INTEGER PRIMARY KEY,
-                DiscordID TEXT UNIQUE NOT NULL,
-                Ckey TEXT,
-                RoleLevel INTEGER
-            );
-            """)
-            self._connection.commit()
+        cursor = self._connection.cursor()
+        cursor.execute("CREATE TABLE IF NOT EXISTS users (ID INTEGER PRIMARY KEY, DiscordID TEXT UNIQUE NOT NULL, Ckey TEXT, RoleLevel INTEGER);")
+        self._connection.commit()
 
     def __getitem__(self, discord_id: str) -> dict:
         """
@@ -64,12 +45,7 @@ class DBManager:
             dict: User information in the form of a dictionary {'Ckey': ckey, 'RoleLevel': role_level}.
         """
         cursor = self._connection.cursor()
-        cursor.execute("""
-        SELECT Ckey, RoleLevel
-        FROM users
-        WHERE DiscordID = ?;
-        """, 
-        (discord_id,))
+        cursor.execute("SELECT Ckey, RoleLevel FROM users WHERE DiscordID = ?;", (discord_id))
         row = cursor.fetchone()
         if row:
             return {'Ckey': row[0], 'RoleLevel': row[1]}
@@ -97,10 +73,7 @@ class DBManager:
             role_level (int): The role level of the member.
         """
         cursor = self._connection.cursor()
-        cursor.execute("""
-        INSERT INTO users (DiscordID, Ckey, RoleLevel) VALUES (?, ?, ?);
-        """, 
-        (discord_id, ckey, role_level))
+        cursor.execute("INSERT INTO users (DiscordID, Ckey, RoleLevel) VALUES (?, ?, ?);", (discord_id, ckey, role_level))
         self._connection.commit()
 
     def update_member(self, discord_id: str, new_ckey: str = None, new_role_level: int = None) -> None:
@@ -113,13 +86,7 @@ class DBManager:
             new_role_level (int, optional): The new role level of the member. Defaults to None.
         """
         cursor = self._connection.cursor()
-        cursor.execute("""
-        UPDATE users
-        SET Ckey = COALESCE(?, Ckey),
-            RoleLevel = COALESCE(?, RoleLevel)
-        WHERE DiscordID = ?;
-        """,
-        (new_ckey, new_role_level, discord_id))
+        cursor.execute("UPDATE users SET Ckey = COALESCE(?, Ckey), RoleLevel = COALESCE(?, RoleLevel) WHERE DiscordID = ?;", (new_ckey, new_role_level, discord_id))
         self._connection.commit()
     
     def add_or_update_member(self, discord_id: str, ckey: str, role_level: int) -> None:
@@ -147,11 +114,7 @@ class DBManager:
         """
         try:
             cursor = self._connection.cursor()
-            cursor.execute("""
-            SELECT DiscordID, Ckey, RoleLevel
-            FROM users
-            WHERE RoleLevel != 0;
-            """)
+            cursor.execute("SELECT DiscordID, Ckey, RoleLevel FROM users WHERE RoleLevel != 0;")
             rows = cursor.fetchall()
             users = [{"DiscordID": row[0], "Ckey": row[1], "RoleLevel": row[2]} for row in rows]
             return users
